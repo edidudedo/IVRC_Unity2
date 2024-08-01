@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 364892098b0e287448e0550b36df3b92
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - rayInteractor: {fileID: 6325095486546308546, guid: a59b4ee2360823a4fb454372a6cda31f, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
