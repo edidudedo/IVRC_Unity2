@@ -7,6 +7,8 @@ public class WorldManager : MonoBehaviour
     private bool isPassthroughEnabled = false;
     public GameObject cameraRig;
     public GameObject vrWorld;
+    public GameObject HandVisualLeft;
+    public GameObject HandVisualRight;
 
     private OVRPassthroughLayer passthroughLayer;
 
@@ -25,7 +27,6 @@ public class WorldManager : MonoBehaviour
         {
             Debug.LogError("cameraRig GameObject is not assigned.");
         }
-
         TogglePassthrough();
     }
 
@@ -47,12 +48,16 @@ public class WorldManager : MonoBehaviour
                 // Disable passthrough
                 passthroughLayer.enabled = false;
                 vrWorld.SetActive(true); // Assuming you want to show the VR world when passthrough is off
+                HandVisualLeft.SetActive(true);
+                HandVisualRight.SetActive(true);
             }
             else
             {
                 // Enable passthrough
                 passthroughLayer.enabled = true;
                 vrWorld.SetActive(false); // Assuming you want to hide the VR world when passthrough is on
+                HandVisualLeft.SetActive(false);
+                HandVisualRight.SetActive(false);
             }
 
             // Toggle the state
