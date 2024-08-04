@@ -23,7 +23,15 @@ public class Brush : MonoBehaviour
     {
         if (textPanel != null)
         {
-            textPanel.text = "BRUSH MODE";
+            if (textPanel.text != "BRUSH MODE")
+            {
+                textPanel.text = "BRUSH MODE";
+            }
+            else
+            {
+                textPanel.text = "OFF MODE";
+            }
+            
         }
     }
 }
