@@ -701,13 +701,8 @@ namespace Valve.VR
                     if (bones[boneIndex] == null)
                         continue;
 
-                    if (float.IsNaN(bonePositions[boneIndex].x))
-                        Debug.LogError("got a nan");
-                    else
-                    {
-                        SetBonePosition(boneIndex, bonePositions[boneIndex]);
-                        SetBoneRotation(boneIndex, boneRotations[boneIndex]);
-                    }
+                    SetBonePosition(boneIndex, bonePositions[boneIndex]);
+                    SetBoneRotation(boneIndex, boneRotations[boneIndex]);
                 }
             }
             else
@@ -762,12 +757,7 @@ namespace Valve.VR
         public virtual void SetBonePosition(int boneIndex, Vector3 localPosition)
         {
             if (onlySetRotations == false) //ignore position sets if we're only setting rotations
-            {
-                if (float.IsNaN(localPosition.x))
-                    Debug.LogError("got a nan");
-                else
-                    bones[boneIndex].localPosition = localPosition;
-            }
+                bones[boneIndex].localPosition = localPosition;
         }
 
         public virtual void SetBoneRotation(int boneIndex, Quaternion localRotation)
@@ -823,15 +813,7 @@ namespace Valve.VR
                 {
                     for (int boneIndex = 0; boneIndex < rawSkeleton.Length; boneIndex++)
                     {
-                        if (float.IsNaN(rawSkeleton[boneIndex].x))
-                            Debug.Log("nananana");
-                        else
-                        {
-                            rawSkeleton[boneIndex] = MirrorPosition(boneIndex, rawSkeleton[boneIndex]);
-
-                            if (float.IsNaN(rawSkeleton[boneIndex].x))
-                                Debug.Log("nananana mirror");
-                        }
+                        rawSkeleton[boneIndex] = MirrorPosition(boneIndex, rawSkeleton[boneIndex]);
                     }
                 }
 
