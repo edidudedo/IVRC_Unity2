@@ -28,11 +28,10 @@ public class changeColor : MonoBehaviour
             Debug.LogError("Renderer component not found on the GameObject.");
             return;
         }
-
         // Assign the color change material to the renderer
         if (colorChangeMaterial != null)
         {
-            hand.material = colorChangeMaterial;
+            colorChangeMaterial.color = Color.white;
         }
         else
         {
@@ -40,55 +39,21 @@ public class changeColor : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // UpdateMaterialColor();
-    }
-
-    // void UpdateMaterialColor()
-    // {
-    //     if (hand != null && hand.material != null)
-    //     {
-    //         switch (m_ColorNumber)
-    //         {
-    //             case 0:
-    //                 hand.material.color = Color.white;
-    //                 break;
-    //             case 1:
-    //                 hand.material.color = Color.yellow;
-    //                 break;
-    //             case 2:
-    //                 hand.material.color = new Color(191f / 255f, 150f / 255f, 99f / 255f); // Brown
-    //                 break;
-    //             case 3:
-    //                 hand.material.color = new Color(58f / 255f, 117f / 255f, 36f / 255f); // Dark Green
-    //                 break;
-    //             default:
-    //                 hand.material.color = Color.white;
-    //                 break;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("lefthand or its material is not set.");
-    //     }
-    // }
     void OnTriggerEnter(Collider other) 
     {
         Debug.Log("Collision detected with " + other.gameObject.name);
         // Check if the object the player collided with has the "PickUp" tag.
         if (other.gameObject.CompareTag("Baguette")) 
         {
-            hand.material.color = new Color(191f / 255f, 150f / 255f, 99f / 255f); // Brown
+            colorChangeMaterial.color = new Color(191f / 255f, 150f / 255f, 99f / 255f); // Brown
         }
         if (other.gameObject.CompareTag("Cheese")) 
         {
-            hand.material.color = Color.yellow;
+            colorChangeMaterial.color = Color.yellow;
         }
         if (other.gameObject.CompareTag("Wine")) 
         {
-            hand.material.color = new Color(58f / 255f, 117f / 255f, 36f / 255f); // Dark Green
+            colorChangeMaterial.color = new Color(58f / 255f, 117f / 255f, 36f / 255f); // Dark Green
         }
     }
 }
