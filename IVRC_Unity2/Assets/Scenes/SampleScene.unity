@@ -546,6 +546,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4876747146098668355, guid: 46226a735908078468ed226e3646cd56, type: 3}
+      propertyPath: _maxRayLength
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 4995627914217319206, guid: 46226a735908078468ed226e3646cd56, type: 3}
       propertyPath: m_Name
       value: OVRInteraction Variant
@@ -558,6 +562,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+    - target: {fileID: 6216723314837808127, guid: 46226a735908078468ed226e3646cd56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6216723314948047137, guid: 46226a735908078468ed226e3646cd56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7043732933364599779, guid: 46226a735908078468ed226e3646cd56, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -666,6 +678,10 @@ PrefabInstance:
       propertyPath: _handMaterialPropertyBlockEditor
       value: 
       objectReference: {fileID: 7129473807913395347}
+    - target: {fileID: 8273653069744206272, guid: 46226a735908078468ed226e3646cd56, type: 3}
+      propertyPath: _maxRayLength
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7545696410589391501, guid: 46226a735908078468ed226e3646cd56, type: 3}
