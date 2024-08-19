@@ -71,6 +71,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_630ef903bca249c983719b36c850af8f_Out_0_Texture2D:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -102,6 +106,9 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _IntersectionDepth: 0.8
+    - _IntersectionNoiseScale: 3
+    - _IntersectionNoiseStrength: 0.7
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -121,8 +128,11 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _IntersectionColor: {r: 0, g: 2.321468, b: 5.216475, a: 1}
+    - _IntersectionNoiseSpeed: {r: 0, g: 0.2, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _targetpos: {r: -5.11, g: -1.848, b: -2.911, a: 0}
+    - _targetpos: {r: 4.976, g: 2.287, b: 3.813, a: 0}
+    - _targetpos1: {r: 1.191, g: 0.80086, b: 1.44, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2848634813822504036
 MonoBehaviour:
