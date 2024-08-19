@@ -14,6 +14,7 @@ Shader "VertexColorShader"
     ENDCG
     SubShader
     {
+        Cull Off        // CullingをOFFに（裏面を描画）
         AlphaToMask On  // Alpha値をマスクとして利用
         Pass
         {
