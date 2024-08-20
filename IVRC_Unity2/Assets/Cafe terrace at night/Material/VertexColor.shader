@@ -15,7 +15,7 @@ Shader "VertexColorShader"
     {
         Tags { "Queue"="Geometry" "RenderType"="Opaque"}
         Cull Off        // CullingをOFFに（裏面を描画）
-        AlphaToMask On  // Alpha値をマスクとして利用
+        // AlphaToMask On  // Alpha値をマスクとして利用
 
         Pass
         {
@@ -87,7 +87,8 @@ Shader "VertexColorShader"
                 #ifdef GrayScale
                     col = mask;
                 #else
-                    col = i.color;  
+                    col = i.color;
+                    clip(mask.a - 0.01);
                     col *= mask;    // カラーを指定したテクスチャでマスク
                 #endif
                 
