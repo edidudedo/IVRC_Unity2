@@ -13,7 +13,7 @@ Shader "VertexColorShader"
     ENDCG
     SubShader
     {
-        Tags { "Queue"="Geometry" "RenderType"="Opaque"}
+        Tags { "Queue"="AlphaTest" "RenderType"="TransparentCutout"}
         Cull Off        // CullingをOFFに（裏面を描画）
         AlphaToMask On  // Alpha値をマスクとして利用
 
@@ -88,7 +88,9 @@ Shader "VertexColorShader"
                     col = mask;
                 #else
                     col = i.color;  
+                    clip(mask - 0.001);
                     col *= mask;    // カラーを指定したテクスチャでマスク
+                    col.a = 1;
                 #endif
                 
                 // ライトとカメラ方向のベクトルを正規化
