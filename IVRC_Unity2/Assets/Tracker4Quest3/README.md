@@ -8,9 +8,9 @@ Meta XRのOVRCameraRigでvive trackerを使うためのscriptです。
     "activateMultipleDrivers" : true,  
     "debugInputBinding" : true,  
     "forcedDriver" : "null",  
-1. SteamVRを再起動する  
-2. Vive TrackerをSteamVRと接続する
-3. TrackerをSteamVRに接続する
+    "requireHmd" : false,  
+3. SteamVRを再起動する  
+4. Vive TrackerをSteamVRと接続する
 
 # 使い方
 1. TrackerManager prefabをsceneに追加する
