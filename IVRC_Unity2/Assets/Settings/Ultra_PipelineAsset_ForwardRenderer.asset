@@ -98,7 +98,7 @@ MonoBehaviour:
   m_DepthPrimingMode: 0
   m_CopyDepthMode: 1
   m_AccurateGbufferNormals: 0
-  m_IntermediateTextureMode: 1
+  m_IntermediateTextureMode: 0
 --- !u!114 &1791311777933462957
 MonoBehaviour:
   m_ObjectHideFlags: 0

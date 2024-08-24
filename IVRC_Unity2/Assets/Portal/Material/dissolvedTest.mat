@@ -131,8 +131,8 @@ Material:
     - _IntersectionColor: {r: 0, g: 2.321468, b: 5.216475, a: 1}
     - _IntersectionNoiseSpeed: {r: 0, g: 0.2, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _targetpos: {r: -5.11, g: -1.848, b: -2.911, a: 0}
-    - _targetpos1: {r: 1.191, g: 0.80086, b: 1.44, a: 0}
+    - _targetpos: {r: 0, g: 2, b: 3.321, a: 0}
+    - _targetpos1: {r: 0, g: 2, b: 3.321, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2848634813822504036
 MonoBehaviour:
