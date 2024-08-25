@@ -5,7 +5,7 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     public string targetTag;
-    public GameObject insidePortalGameObject;
+    public GameObject[] insidePortalGameObject;
     public int newLayer;
 
     private void OnTriggerEnter(Collider other)
@@ -18,7 +18,10 @@ public class Portal : MonoBehaviour
 
             if (angle < 90)
             {
-                SetLayerRecursively(insidePortalGameObject, newLayer);
+                foreach (GameObject obj in insidePortalGameObject)
+                {
+                    SetLayerRecursively(obj, newLayer);
+                }
             }
         }
     }
