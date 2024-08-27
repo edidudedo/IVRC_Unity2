@@ -46,6 +46,7 @@ public class changeColor : MonoBehaviour
         if (other.gameObject.CompareTag("Baguette")) 
         {
             colorChangeMaterial.color = new Color(191f / 255f, 150f / 255f, 99f / 255f); // Brown
+            Debug.Log("t");
         }
         if (other.gameObject.CompareTag("Cheese")) 
         {

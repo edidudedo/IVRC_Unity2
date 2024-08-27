@@ -5,12 +5,14 @@ using UnityEngine;
 public class Dissolution : MonoBehaviour
 {
     public Material mat;
-    public Transform targetObj;
-    public Transform targetObj1;
+    public Transform headTransform;
+    public Transform rightHandTransform;
+    public Transform leftHandTransform;
 
     void Update()
     {
-        mat.SetVector("_targetpos", targetObj.position);
-        mat.SetVector("_targetpos1", targetObj1.position);
+        mat.SetVector("_HeadPos", headTransform.position);
+        mat.SetVector("_RightHandPos", rightHandTransform.position);
+        mat.SetVector("_LeftHandPos", leftHandTransform.position);
     }
 }
