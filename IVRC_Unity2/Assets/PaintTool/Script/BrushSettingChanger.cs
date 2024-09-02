@@ -8,11 +8,13 @@ using UnityEngine;
 public class BrushSettingChanger : MonoBehaviour
 {
     [SerializeField] private Color paintColor = Color.white;
-    [SerializeField] private float brushSize = 0.003f;
+    [SerializeField] private float brushSize = 0.03f;
 
     public void ChangeBrushSetting()
     {
         BrushSettign.paintColor = paintColor;
         BrushSettign.brushSize = brushSize;
+        Debug.Log("paintColor : " + BrushSettign.paintColor);
+        Debug.Log("brushSize : "  + BrushSettign.brushSize);
     }
 }
