@@ -58,10 +58,28 @@ public class VertexPaintTool : MonoBehaviour
     }
 
     /// <summary>
+    /// 指定された頂点の色を元に戻す
+    /// </summary>
+    public Color GetOriginVertexColor(int i)
+    {
+        return colorOrigin[i];
+    }
+
+    /// <summary>
     /// play mode終了時に、色を元に戻す / Return to original color at the end of play mode.
     /// </summary>
     private void OnApplicationQuit()
     {
         SharedMesh.SetColors(colorOrigin);
+    }
+
+    public void SetColor2White()
+    {
+        List<Color> colors = new List<Color>(SharedMesh.vertexCount);
+        for (int i = 0; i < SharedMesh.vertexCount; i++) {
+            colors.Add(Color.white);
+        }
+        
+        SharedMesh.SetColors(colors);
     }
 }
