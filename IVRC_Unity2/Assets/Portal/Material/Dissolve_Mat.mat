@@ -131,11 +131,11 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeColor: {r: 0.02745098, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HeadPos: {r: 0, g: 1.28, b: -0.471, a: 0}
+    - _HeadPos: {r: 0, g: 1.28, b: 2.87, a: 0}
     - _IntersectionColor: {r: 0, g: 2.321468, b: 5.216475, a: 1}
     - _IntersectionNoiseSpeed: {r: 0, g: 0.2, b: 0, a: 0}
-    - _LeftHandPos: {r: -0.39811933, g: 0.8855394, b: -0.6861681, a: 0}
-    - _RightHandPos: {r: 0.20111069, g: 0.88554823, b: -0.7175869, a: 0}
+    - _LeftHandPos: {r: -0.3301337, g: 1.534847, b: 4.8686237, a: 0}
+    - _RightHandPos: {r: 0.08020696, g: 0.99433506, b: 4.6864223, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _targetpos: {r: 0, g: 1.9, b: 3.321, a: 0}
     - _targetpos1: {r: 0, g: 1.9, b: 3.321, a: 0}
