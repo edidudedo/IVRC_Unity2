@@ -58,10 +58,12 @@ public class StateManager : MonoBehaviour
         else if (stateNumber == "3")
         {
             //FIXME
+            //When User starts coloring, change to state 4
         }
         else if (stateNumber == "4")
         {
             //FIXME
+            //When user finishes coloring (80%), change to state 5
         }
         else if (stateNumber == "5")
         {
