@@ -9,7 +9,7 @@ public class IdleAnimation : MonoBehaviour
     void Start()
     {
         // Save the initial position of the object
-        startPosition = transform.position;
+        startPosition = transform.localPosition;
     }
 
     void Update()
@@ -21,12 +21,12 @@ public class IdleAnimation : MonoBehaviour
         newPosition.y += Mathf.Sin(Time.time * frequency) * amplitude;
 
         // Apply the new position
-        transform.position = newPosition;
+        transform.localPosition = newPosition;
     }
 
     // When the script is disabled, reset the object's position to the original
     void OnDisable()
     {
-        transform.position = startPosition; // Return to the original position
+        transform.localPosition = startPosition; // Return to the original position
     }
 }
