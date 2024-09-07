@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectManager : MonoBehaviour
+public class WineManager : MonoBehaviour
 {
-    public bool isIdle = false; 
-    public GameObject particleSystemObject; 
+    public bool isIdle = false;
+    public GameObject particleSystemObject;
     public IdleAnimation animator;
-    private Timer timer; 
+    private Timer timer;
     private bool wasIdle = false;
 
     void Start()
@@ -52,20 +52,20 @@ public class ObjectManager : MonoBehaviour
             wasIdle = false;
         }
     }
-    void OnTriggerEnter(Collider collision)
+    public void OnChildTriggerEnter(Collider collision)
     {
         isIdle = true;
         timer.StopTimer();
     }
 
     // Called when the collision ends
-    void OnTriggerExit(Collider collision)
+    public void OnChildTriggerExit(Collider collision)
     {
-        isIdle = false; 
-        if(wasIdle)
+        isIdle = false;
+        if (wasIdle)
         {
             timer.StartTimer();
         }
-         
+
     }
 }
