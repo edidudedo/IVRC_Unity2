@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 736c4a92762d40f46885faac0e93a03b, type: 2}
     - target: {fileID: 919132149155446097, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
       propertyPath: m_Name
-      value: GuideModel
+      value: Guide
       objectReference: {fileID: 0}
     - target: {fileID: 1630794972795428178, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
       propertyPath: m_Materials.Array.size
@@ -116,10 +116,20 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 736c4a92762d40f46885faac0e93a03b, type: 2}
+    - target: {fileID: 9189461773309921287, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2067785527089964369}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2857874229585772373}
     - targetCorrespondingSourceObject: {fileID: -815955208958245277, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6089929866089779480}
@@ -150,8 +160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stiffnessForce: 500
-  dragForce: 0.4
+  stiffnessForce: 200
+  dragForce: 0.2
   springForce: {x: 0, y: 1, z: 0}
   windInfluence: 0
   pivotNode: {fileID: 0}
@@ -186,8 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stiffnessForce: 500
-  dragForce: 0.4
+  stiffnessForce: 200
+  dragForce: 0.2
   springForce: {x: 0, y: 1, z: 0}
   windInfluence: 0
   pivotNode: {fileID: 0}
@@ -205,6 +215,45 @@ MonoBehaviour:
   sphereColliders: []
   capsuleColliders: []
   panelColliders: []
+--- !u!1 &3758951864993173598 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
+  m_PrefabInstance: {fileID: 4101392913084771599}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2067785527089964369
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758951864993173598}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: de278a4f3e2e0854991a1a96d1e21c4f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2857874229585772373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758951864993173598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e665606eadc0a489f3284080fd8b3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eyeClose: 0
 --- !u!1 &5496139839039531884 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -815955208958245277, guid: 47add0397348f5b4f8e67de1b7fcb120, type: 3}
@@ -222,8 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03118221f4bfcd74ba0ad8075da02411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stiffnessForce: 500
-  dragForce: 0.4
+  stiffnessForce: 200
+  dragForce: 0.2
   springForce: {x: 0, y: 1, z: 0}
   windInfluence: 0
   pivotNode: {fileID: 0}
