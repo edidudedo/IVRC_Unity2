@@ -39,7 +39,7 @@ public class changeColor : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collision other) 
+    void OnTriggerEnter(Collider other) 
     {
         Debug.Log("Collision detected with " + other.gameObject.name);
         // Check if the object the player collided with has the "PickUp" tag.
