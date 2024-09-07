@@ -11,6 +11,8 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
     {
         public GameObject targetObject;
         public string serialNumber;
+        public Vector3 positionOffset;
+        public Vector3 rotationOffset;
         [HideInInspector] public int deviceId = -1;
     }
 
@@ -87,7 +89,17 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
                 var pose = allPoses[binding.deviceId];
                 var absTracking = pose.mDeviceToAbsoluteTracking;
                 var mat = new SteamVR_Utils.RigidTransform(absTracking);
-                binding.targetObject.transform.SetPositionAndRotation(mat.pos, mat.rot);
+
+                Quaternion trackerRotation = mat.rot;
+
+                Quaternion offsetRotation = Quaternion.Euler(binding.rotationOffset);
+                Quaternion finalRotation = trackerRotation * offsetRotation;
+
+                Vector3 offsetPositionInWorldSpace = trackerRotation * binding.positionOffset;
+
+                Vector3 finalPosition = mat.pos + offsetPositionInWorldSpace;
+
+                binding.targetObject.transform.SetPositionAndRotation(finalPosition, finalRotation);
             }
         }
     }
