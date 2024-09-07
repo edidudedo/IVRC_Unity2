@@ -46,14 +46,23 @@ public class changeColor : MonoBehaviour
         if (other.gameObject.CompareTag("Baguette")) 
         {
             colorChangeMaterial.color = new Color(191f / 255f, 150f / 255f, 99f / 255f); // Brown
+            TouchedObjectController.BaguetteIsTouched = true;
+            TouchedObjectController.CheeseIsTouched = false;
+            TouchedObjectController.WineIsTouched = false;
         }
         if (other.gameObject.CompareTag("Cheese")) 
         {
             colorChangeMaterial.color = Color.yellow;
+            TouchedObjectController.BaguetteIsTouched = false;
+            TouchedObjectController.CheeseIsTouched = true;
+            TouchedObjectController.WineIsTouched = false;
         }
         if (other.gameObject.CompareTag("Wine")) 
         {
             colorChangeMaterial.color = new Color(58f / 255f, 117f / 255f, 36f / 255f); // Dark Green
+            TouchedObjectController.BaguetteIsTouched = false;
+            TouchedObjectController.CheeseIsTouched = false;
+            TouchedObjectController.WineIsTouched = true;
         }
     }
 }
