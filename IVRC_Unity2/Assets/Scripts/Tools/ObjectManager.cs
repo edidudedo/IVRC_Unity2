@@ -19,13 +19,12 @@ public class ObjectManager : MonoBehaviour
         if (animator == null)
             animator = GetComponentInChildren<IdleAnimation>();
 
-        timer = gameObject.AddComponent<Timer>();
+        timer = gameObject.GetComponent<Timer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(timer.GetElapsedTime());
         if (isIdle)
         {
             particleSystemObject.SetActive(false);
@@ -34,6 +33,7 @@ public class ObjectManager : MonoBehaviour
                 animator.enabled = false;
             if (!wasIdle)
                 wasIdle = true;
+            timer.StopTimer();
         }
         else
         {
@@ -47,9 +47,25 @@ public class ObjectManager : MonoBehaviour
 
                 if (animator != null)
                     animator.enabled = true;
-                wasIdle = false;
                 timer.StopTimer();
             }
+            wasIdle = false;
         }
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        isIdle = true;
+        timer.StopTimer();
+    }
+
+    // Called when the collision ends
+    void OnCollisionExit(Collision collision)
+    {
+        isIdle = false; 
+        if(wasIdle)
+        {
+            timer.StartTimer();
+        }
+         
     }
 }

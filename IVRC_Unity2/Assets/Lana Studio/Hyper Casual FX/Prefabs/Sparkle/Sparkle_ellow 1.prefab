@@ -9832,7 +9832,7 @@ GameObject:
   - component: {fileID: 4033412786151888120}
   - component: {fileID: 4033412786151888121}
   m_Layer: 0
-  m_Name: Sparkle_ellow
+  m_Name: Sparkle_ellow 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
