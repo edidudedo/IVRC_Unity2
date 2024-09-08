@@ -14,6 +14,8 @@ public class PaintToolManager : MonoBehaviour
   public RayInteractor rayInteractorR, rayInteractorL;
   [SerializeField] public bool isColorFixMode = true;
   private RayInteractor rayInteractor;
+  private VertexPaintTool vertexPaintTool;
+
 
   // 壁とビームとの交点を保持するクラスrayInterator　を取得
   public void Start()
@@ -24,6 +26,9 @@ public class PaintToolManager : MonoBehaviour
     rayInteractorL = objL.GetComponent<RayInteractor>();
   }
 
+  /// <summary>
+  /// コントローラのrayで色を塗る
+  /// </summary>
   private void Update()
   {
     // Check if right hand rayInteractor is assigned
@@ -45,41 +50,59 @@ public class PaintToolManager : MonoBehaviour
             obj.CompareTag("Untagged")) {
             
           // get ray hitted mesh
-          var vertexPaintTool = obj.GetComponent<VertexPaintTool>();
+          vertexPaintTool = obj.GetComponent<VertexPaintTool>();
           Mesh sharedMesh = vertexPaintTool.SharedMesh;
-          
-          // get ray hitted point/rayの当たった座標の取得
-          hitPoint = obj.transform.InverseTransformPoint(hitPoint); // convert world position to local position(object space)
 
-          // rayが当たったmeshを構成する頂点の取得
-          if (vertices.Count != sharedMesh.vertexCount)
-              vertexPaintTool.SharedMesh.GetVertices(vertices);
+          // 色がまだ塗られていない OR 自分で違う色を塗りたいなら
+          if (!vertexPaintTool.isPainted && isColorFixMode || !isColorFixMode) {
+            // get ray hitted point/rayの当たった座標の取得
+            hitPoint = obj.transform.InverseTransformPoint(hitPoint); // convert world position to local position(object space)
 
-          // 頂点カラーを取得
-          var colors = new List<Color>(sharedMesh.vertexCount);
-          sharedMesh.GetColors(colors);
+            // rayが当たったmeshを構成する頂点の取得
+            if (vertices.Count != sharedMesh.vertexCount) vertexPaintTool.SharedMesh.GetVertices(vertices);
 
-          // 頂点カラーの書き換え
-          for (var i = 0; i < vertices.Count; i++)
-          {
-            var v = vertices[i]; // 頂点の座標(object space)
-            float sqrDistanceOS = (hitPoint - v).sqrMagnitude; // Rayのhitした点とmeshの各頂点の距離 (object space)
-            if (sqrDistanceOS > BrushSettign.brushSize * BrushSettign.brushSize) continue; // 距離がある程度離れている頂点は除外する
-
-            if (isColorFixMode) {
-              // 色を元に戻す
-              colors[i] = vertexPaintTool.GetOriginVertexColor(i);
-            }
-            else {
-              // 色を書き換える
-              colors[i] = Color.Lerp(colors[i], BrushSettign.paintColor, BrushSettign.paintColor.a);
-            }
+            // rayが当たった付近の色を変更
+            ChangeVertexColor(sharedMesh, hitPoint);
           }
-
-          // 頂点カラーを適用
-          sharedMesh.SetColors(colors);
         }
       }
     }
+  }
+
+  /// <summary>
+  /// rayのhitPoint付近のsharedMeshの色を塗る関数
+  /// </summary>
+  /// <param name="sharedMesh">色を塗るmesh</param>
+  /// <param name="hitPoint">色を塗る中心の座標（rayのhitした場所）</param>
+  private void ChangeVertexColor(Mesh sharedMesh, Vector3 hitPoint)
+  {
+    // 頂点カラーを取得
+    var colors = new List<Color>(sharedMesh.vertexCount);
+    sharedMesh.GetColors(colors);
+
+    // 頂点カラーの書き換え
+    for (var i = 0; i < vertices.Count; i++)
+    {
+      var v = vertices[i]; // 頂点の座標(object space)
+      float sqrDistanceOS = (hitPoint - v).sqrMagnitude; // Rayのhitした点とmeshの各頂点の距離 (object space)
+      if (sqrDistanceOS > BrushSettign.brushSize * BrushSettign.brushSize) continue; // 距離がある程度離れている頂点は除外する
+
+      // 色を基に戻すモードなら
+      if (isColorFixMode) {
+        // 色を元に戻す
+        colors[i] = vertexPaintTool.GetOriginVertexColor(i);
+        vertexPaintTool.colored[i] = true;
+      }
+      // 色を塗るモードなら
+      else {
+        // 色を書き換える
+        colors[i] = Color.Lerp(colors[i], BrushSettign.paintColor, BrushSettign.paintColor.a);
+        vertexPaintTool.colored[i] = false;
+      }
+    }
+
+    // 頂点カラーを適用
+    sharedMesh.SetColors(colors);
+    if (!FlagManager.startColoring) FlagManager.startColoring = true;
   }
 }
