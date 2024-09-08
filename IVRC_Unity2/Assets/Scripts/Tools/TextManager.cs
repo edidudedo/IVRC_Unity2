@@ -77,5 +77,6 @@ public class TextManager : MonoBehaviour
 
         // Wait until the longer of text or audio has finished
         yield return new WaitForSeconds(maxDuration - textDuration);
+        yield return new WaitForSeconds(0.5f);
     }
 }
