@@ -1,68 +1,116 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Management;
-using Oculus;
+using Valve.VR;
+using System.Text;
 
-public class WorldManager : MonoBehaviour
+public class InitialPositionBinder : MonoBehaviour
 {
-    private bool isPassthroughEnabled = false;
-    public GameObject cameraRig;
-    public GameObject vrWorld;
-    public GameObject HandVisualLeft;
-    public GameObject HandVisualRight;
+    [System.Serializable]
+    public class TrackerBinding
+    {
+        public GameObject targetObject;
+        public string serialNumber;
+        public Vector3 positionOffset;
+        [HideInInspector] public int deviceId = -1;
+        [HideInInspector] public Vector3 initialPosition;
+    }
 
-    private OVRPassthroughLayer passthroughLayer;
+    public List<TrackerBinding> trackerBindings = new List<TrackerBinding>();
+    public ETrackedDeviceClass targetClass = ETrackedDeviceClass.GenericTracker;
+    public KeyCode rebindKey = KeyCode.R;
+
+    private CVRSystem _vrSystem;
 
     void Start()
     {
-        // Assuming the OVRPassthroughLayer is attached to the cameraRig
-        if (cameraRig != null)
+        var error = EVRInitError.None;
+        _vrSystem = OpenVR.Init(ref error, EVRApplicationType.VRApplication_Other);
+        if (error != EVRInitError.None)
         {
-            passthroughLayer = cameraRig.GetComponent<OVRPassthroughLayer>();
-            if (passthroughLayer == null)
-            {
-                Debug.LogError("OVRPassthroughLayer component not found on cameraRig.");
-            }
+            Debug.LogWarning("Init error: " + error);
         }
         else
         {
-            Debug.LogError("cameraRig GameObject is not assigned.");
+            Debug.Log("OpenVR initialized successfully");
+            BindInitialPositions();
         }
-        TogglePassthrough();
+    }
+
+    void BindInitialPositions()
+    {
+        foreach (var binding in trackerBindings)
+        {
+            binding.deviceId = -1;
+        }
+
+        TrackedDevicePose_t[] allPoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
+        _vrSystem.GetDeviceToAbsoluteTrackingPose(ETrackingUniverseOrigin.TrackingUniverseStanding, 0, allPoses);
+
+        for (uint i = 0; i < OpenVR.k_unMaxTrackedDeviceCount; i++)
+        {
+            var deviceClass = _vrSystem.GetTrackedDeviceClass(i);
+            if (deviceClass != ETrackedDeviceClass.Invalid && deviceClass == targetClass)
+            {
+                string serialNumber = GetDeviceSerialNumber((int)i);
+                Debug.Log($"Found device {i} with serial number: {serialNumber}");
+
+                var binding = trackerBindings.Find(b => b.serialNumber == serialNumber);
+                if (binding != null)
+                {
+                    binding.deviceId = (int)i;
+                    Debug.Log($"Bound device {i} to object: {binding.targetObject.name}");
+
+                    var pose = allPoses[i];
+                    var absTracking = pose.mDeviceToAbsoluteTracking;
+                    var mat = new SteamVR_Utils.RigidTransform(absTracking);
+                    Vector3 trackerPosition = mat.pos;
+
+                    binding.initialPosition = trackerPosition;
+                    UpdateObjectPosition(binding);
+
+                    Debug.Log($"Set initial position for {binding.targetObject.name}: {binding.initialPosition}");
+                }
+            }
+        }
+    }
+
+    void UpdateObjectPosition(TrackerBinding binding)
+    {
+        if (binding.targetObject != null)
+        {
+            binding.targetObject.transform.position = binding.initialPosition + binding.positionOffset;
+        }
+    }
+
+    string GetDeviceSerialNumber(int deviceId)
+    {
+        StringBuilder serialNumber = new StringBuilder(64);
+        ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
+        _vrSystem.GetStringTrackedDeviceProperty((uint)deviceId, ETrackedDeviceProperty.Prop_SerialNumber_String, serialNumber, 64, ref error);
+        if (error != ETrackedPropertyError.TrackedProp_Success)
+        {
+            Debug.LogError($"Error getting serial number for device {deviceId}: {error}");
+            return "Unknown";
+        }
+        return serialNumber.ToString();
     }
 
     void Update()
     {
-        // Check for a key press to toggle passthrough
-        if (Input.GetKeyDown(KeyCode.P)) // Change KeyCode.P to whatever key you prefer
+        if (Input.GetKeyDown(rebindKey))
         {
-            TogglePassthrough();
+            BindInitialPositions();
+        }
+
+        foreach (var binding in trackerBindings)
+        {
+            UpdateObjectPosition(binding);
         }
     }
 
-    void TogglePassthrough()
+    void OnDestroy()
     {
-        if (passthroughLayer != null)
-        {
-            if (isPassthroughEnabled)
-            {
-                // Disable passthrough
-                passthroughLayer.enabled = false;
-                vrWorld.SetActive(true); // Assuming you want to show the VR world when passthrough is off
-                HandVisualLeft.SetActive(true);
-                HandVisualRight.SetActive(true);
-            }
-            else
-            {
-                // Enable passthrough
-                passthroughLayer.enabled = true;
-                vrWorld.SetActive(false); // Assuming you want to hide the VR world when passthrough is on
-                HandVisualLeft.SetActive(false);
-                HandVisualRight.SetActive(false);
-            }
-
-            // Toggle the state
-            isPassthroughEnabled = !isPassthroughEnabled;
-        }
+        OpenVR.Shutdown();
     }
 }
-
