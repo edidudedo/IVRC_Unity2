@@ -138,8 +138,8 @@ Material:
     - _HeadPos: {r: 0, g: 0, b: 0, a: 0}
     - _IntersectionColor: {r: 0, g: 2.321468, b: 5.216475, a: 1}
     - _IntersectionNoiseSpeed: {r: 0, g: 0.2, b: 0, a: 0}
-    - _LeftHandPos: {r: -0.35215268, g: 1.2893819, b: 3.2034445, a: 0}
-    - _RightHandPos: {r: 0.23004197, g: 1.2893814, b: 3.0582912, a: 0}
+    - _LeftHandPos: {r: -0.49222922, g: 0.88587487, b: 0.23054512, a: 0}
+    - _RightHandPos: {r: -1.1898353, g: 0.8922962, b: 0.8744958, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _targetpos: {r: 0, g: 1.9, b: 3.321, a: 0}
     - _targetpos1: {r: 0, g: 1.9, b: 3.321, a: 0}
