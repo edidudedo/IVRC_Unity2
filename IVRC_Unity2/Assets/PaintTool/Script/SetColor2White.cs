@@ -14,6 +14,7 @@ public class SetColor2White : MonoBehaviour
     {
       for(int i = 0; i < vertexPaints.Length; i++) {
         vertexPaints[i].SetColor2White();
+        FlagManager.uncoloredObjectNum++;
       }
     }
 }

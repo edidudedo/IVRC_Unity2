@@ -57,13 +57,19 @@ public class StateManager : MonoBehaviour
         }
         else if (stateNumber == "3")
         {
-            //FIXME
             //When User starts coloring, change to state 4
+            if (FlagManager.startColoring)
+            {
+                stateNumber = "4";
+            }
         }
         else if (stateNumber == "4")
         {
-            //FIXME
             //When user finishes coloring (80%), change to state 5
+            if (FlagManager.uncoloredObjectNum == 0) 
+            {
+                stateNumber = "5";
+            }
         }
         else if (stateNumber == "5")
         {
