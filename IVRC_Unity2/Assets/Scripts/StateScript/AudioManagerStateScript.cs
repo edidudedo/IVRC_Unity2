@@ -54,7 +54,7 @@ public class AudioManagerStateScript : MonoBehaviour
                 audioSource.Play();
             }
         }
-        else if (stateManager.stateNumber == "1" || stateManager.stateNumber == "6")
+        else if (stateManager.stateNumber == "0" || stateManager.stateNumber == "1" || stateManager.stateNumber == "6")
         {
             audioSource.Stop();
         }
