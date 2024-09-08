@@ -90,14 +90,13 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
                 var absTracking = pose.mDeviceToAbsoluteTracking;
                 var mat = new SteamVR_Utils.RigidTransform(absTracking);
 
+                Vector3 trackerPosition = mat.pos;
                 Quaternion trackerRotation = mat.rot;
 
                 Quaternion offsetRotation = Quaternion.Euler(binding.rotationOffset);
                 Quaternion finalRotation = trackerRotation * offsetRotation;
 
-                Vector3 offsetPositionInWorldSpace = trackerRotation * binding.positionOffset;
-
-                Vector3 finalPosition = mat.pos + offsetPositionInWorldSpace;
+                Vector3 finalPosition = trackerPosition + binding.positionOffset;
 
                 binding.targetObject.transform.SetPositionAndRotation(finalPosition, finalRotation);
             }
