@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StateManager : MonoBehaviour
 {
-    public string stateNumber; 
+    public string stateNumber = "0"; 
     private string previousStateNumber;
     GameObject vrWorldObject;
     public GameObject cheese;
@@ -41,7 +41,13 @@ public class StateManager : MonoBehaviour
 
     void ChangeStateNumber()
     {
-        if(stateNumber == "1")
+        if(stateNumber == "0")
+        {
+            if (Input.GetKeyDown(KeyCode.Return)) {
+                stateNumber = "1";
+            }
+        }
+        else if(stateNumber == "1")
         {
             if(vrWorldObject.layer == 0)
             {

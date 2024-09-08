@@ -52,7 +52,7 @@ public class LightStateManager : MonoBehaviour
         {
             lightAnimation.enabled = true;
         }
-        else if (stateManager.stateNumber == "1" || stateManager.stateNumber == "6")
+        else if (stateManager.stateNumber == "0" || stateManager.stateNumber == "1" || stateManager.stateNumber == "6")
         {
             lightAnimation.enabled = false;
         }

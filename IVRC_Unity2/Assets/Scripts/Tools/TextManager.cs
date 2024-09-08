@@ -16,7 +16,7 @@ public class TextManager : MonoBehaviour
     void Start()
     {
         // Example: Fetch and animate content (text + audio) for Scene 1 when the game starts
-        DisplayContentForScene("1");
+        DisplayContentForScene("0");
     }
 
     // Method to get and animate the content (text + audio) for any scene
