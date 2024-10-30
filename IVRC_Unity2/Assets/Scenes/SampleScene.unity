@@ -5765,7 +5765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 969e25fa63b3cfa43b6df7ce28d0d27d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 0}
+  mat: {fileID: 2100000, guid: 4e0c0f405daa33844b2d43efa37f23fd, type: 2}
   headTransform: {fileID: 1146873636}
   rightHandTransform: {fileID: 864707076}
   leftHandTransform: {fileID: 78323895}
