@@ -1,5 +1,8 @@
 # IVRC_Unity2
 
+## Video : 
+Please check this link : https://www.youtube.com/watch?v=qCMsIAocwnc&list=PLVT1Oyg-EdXmzu0R7dajPnyscw4pa_ZJL&index=5
+
 ## How to clone this project : 
 - On the top right of the main page, click Code
 - On local, choose HTTPS and copy the link shown.
