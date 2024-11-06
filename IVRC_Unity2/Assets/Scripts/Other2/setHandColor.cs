@@ -41,7 +41,7 @@ public class changeColor : MonoBehaviour
 
     void OnTriggerEnter(Collider other) 
     {
-        Debug.Log("Collision detected with " + other.gameObject.name);
+        Debug.Log("LEFT Collision detected with " + other.gameObject.tag);
         // Check if the object the player collided with has the "PickUp" tag.
         if (other.gameObject.CompareTag("Baguette")) 
         {

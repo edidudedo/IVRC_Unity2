@@ -2,43 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class setRightHandColor : MonoBehaviour
+public class changeRightHandColor : MonoBehaviour
 {
+    /*
+    0 = nothing
+    1 = cheese
+    2 = bread
+    3 = wine bottle
+    */
+    //public int m_ColorNumber = 0;
+    private Renderer hand;
+
     // The material to be used for changing colors
 
     public Material colorChangeMaterial;
-    public Material rightHandColor;
-    public Material colorHair;
+    public Material vrObjectMaterial;
+    public Material originalColor;
 
     // Called once when the script instance is being loaded
     void Start()
     {
-        // Check if the renderer is found
-        if (colorChangeMaterial == null)
+        if (colorChangeMaterial != null)
         {
-            Debug.LogError("colorChangeMaterial is not assigned.");
-            return;
-        }
+            colorChangeMaterial.mainTexture = originalColor.mainTexture;
 
-        // Assign the color change material to the renderer
-        if (colorHair != null)
-        {
-            rightHandColor.mainTexture = colorHair.mainTexture; 
-            rightHandColor.color = colorHair.color; 
-        }
-        else
-        {
-            Debug.LogError("colorHair is not assigned.");
+            colorChangeMaterial.color = originalColor.color;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter(Collider other)
     {
-        if (colorChangeMaterial.color != Color.white)
+        Debug.Log("RIGHT Collision detected with " + other.gameObject.name);
+        // Check if the object the player collided with has the "PickUp" tag.
+        if (other.gameObject.CompareTag("Baguette"))
         {
-            rightHandColor.mainTexture = colorChangeMaterial.mainTexture; 
-            rightHandColor.color = colorChangeMaterial.color; 
+            colorChangeMaterial.color = new Color(191f / 255f, 150f / 255f, 99f / 255f); // Brown
+            colorChangeMaterial.mainTexture = vrObjectMaterial.mainTexture;
+            TouchedObjectController.BaguetteIsTouched = true;
+            TouchedObjectController.CheeseIsTouched = false;
+            TouchedObjectController.WineIsTouched = false;
+        }
+        if (other.gameObject.CompareTag("Cheese"))
+        {
+            colorChangeMaterial.color = Color.yellow;
+            colorChangeMaterial.mainTexture = vrObjectMaterial.mainTexture;
+            TouchedObjectController.BaguetteIsTouched = false;
+            TouchedObjectController.CheeseIsTouched = true;
+            TouchedObjectController.WineIsTouched = false;
+        }
+        if (other.gameObject.CompareTag("Wine"))
+        {
+            colorChangeMaterial.color = new Color(58f / 255f, 117f / 255f, 36f / 255f); // Dark Green
+            colorChangeMaterial.mainTexture = vrObjectMaterial.mainTexture;
+            TouchedObjectController.BaguetteIsTouched = false;
+            TouchedObjectController.CheeseIsTouched = false;
+            TouchedObjectController.WineIsTouched = true;
         }
     }
 }
