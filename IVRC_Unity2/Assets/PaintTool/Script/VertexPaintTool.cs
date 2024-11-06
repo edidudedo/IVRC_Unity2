@@ -23,7 +23,7 @@ public class VertexPaintTool : MonoBehaviour
     private List<Color> colorOrigin;    // 色を塗るメッシュの元々の色 / Original color of the mesh
     private float timeElapsed = 0.0f;   // ゲーム内の経過時間
     private float timeOut = 0.5f;       // 何秒ごとに、塗り終えたかを確認するか
-    private float boader = 0.9f;        // 頂点のうちの何%を塗れば、塗り終わったことにするかのボーダー/Border that determines what percentage of the vertices must be painted in order for the painting to be considered complete
+    public float boader = 0.55f;        // 頂点のうちの何%を塗れば、塗り終わったことにするかのボーダー/Border that determines what percentage of the vertices must be painted in order for the painting to be considered complete
     public bool isPainted = true;       // 色が塗り終わっているかを管理するフラグ / Flag to manage whether the color has been painted or not
     public List<bool> colored;          // 各頂点に色を塗ったかを管理するフラグ / Flag to manage whether each vertex has been painted with color
     public Mesh SharedMesh              // 色を塗るメッシュ / Mesh to be colored
