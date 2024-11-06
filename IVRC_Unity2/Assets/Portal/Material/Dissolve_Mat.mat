@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Painting:
-        m_Texture: {fileID: 2800000, guid: c9f413ca19c121948a03f538887dc2ba, type: 3}
+        m_Texture: {fileID: 8400000, guid: 1566633930c6d3a4387e193dbc2545aa, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
