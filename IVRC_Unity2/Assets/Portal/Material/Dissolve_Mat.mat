@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Painting:
-        m_Texture: {fileID: 2800000, guid: c9f413ca19c121948a03f538887dc2ba, type: 3}
+        m_Texture: {fileID: 8400000, guid: 1566633930c6d3a4387e193dbc2545aa, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -138,8 +138,8 @@ Material:
     - _HeadPos: {r: 0, g: 0, b: 0, a: 0}
     - _IntersectionColor: {r: 0, g: 2.321468, b: 5.216475, a: 1}
     - _IntersectionNoiseSpeed: {r: 0, g: 0.2, b: 0, a: 0}
-    - _LeftHandPos: {r: -0.4113773, g: 0.8054179, b: -0.3198235, a: 0}
-    - _RightHandPos: {r: -0.015000783, g: 0.6962218, b: 0.2804595, a: 0}
+    - _LeftHandPos: {r: -1.2115359, g: -0.63649595, b: -2.9794014, a: 0}
+    - _RightHandPos: {r: -0.6120816, g: -0.6364949, b: -2.9521801, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _targetpos: {r: 0, g: 1.9, b: 3.321, a: 0}
     - _targetpos1: {r: 0, g: 1.9, b: 3.321, a: 0}
