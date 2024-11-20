@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectAudioScript : MonoBehaviour
+public class ObjectAudioScript2 : MonoBehaviour
 {
     private AudioSource audioSource;
     private VertexPaintTool paintTool;
@@ -18,13 +18,12 @@ public class ObjectAudioScript : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         paintTool = GetComponent<VertexPaintTool>();
-        audioSource.volume = 1.0f; // Start with volume at 0.5
+        audioSource.volume = 0.2f; // Start with volume at 0.5
         successManager.StopSound();
     }
 
     void Update()
     {
-        Debug.Log(_isSuccessPlayed);
         if (!paintTool.isPainted || stateManager.stateNumber == "6")
         {
             StopAudioLoop();
@@ -68,16 +67,16 @@ public class ObjectAudioScript : MonoBehaviour
         while (fadeTime > 0)
         {
             fadeTime -= Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(0.0f, startVolume, fadeTime / fadeOutDuration); 
+            audioSource.volume = Mathf.Lerp(0.0f, startVolume, fadeTime / fadeOutDuration); // Fade from current to 0.2
             yield return null;
         }
 
-        audioSource.volume = 0.0f;
+        audioSource.volume = 0.0f; // Ensure it stops at 0.2
     }
 
     void StopAudioLoop()
     {
         audioSource.Stop();
-        audioSource.volume = 0.5f; // Reset volume to starting level
+        audioSource.volume = 0.2f; // Reset volume to starting level
     }
 }

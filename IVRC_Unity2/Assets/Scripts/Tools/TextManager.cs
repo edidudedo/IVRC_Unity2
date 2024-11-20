@@ -15,6 +15,7 @@ public class TextManager : MonoBehaviour
 
     void Start()
     {
+        audioSource.volume = 0.7f;
         // Example: Fetch and animate content (text + audio) for Scene 1 when the game starts
         DisplayContentForScene("0");
     }
