@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Valve.VR;
-using System.Text;
 
 public class SelfManagementOfTrackedDevices : MonoBehaviour
 {
@@ -19,8 +18,11 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
     public List<TrackerBinding> trackerBindings = new List<TrackerBinding>();
     public ETrackedDeviceClass targetClass = ETrackedDeviceClass.GenericTracker;
     public KeyCode resetDeviceIds = KeyCode.Tab;
+    public string calibrationTrackerSerialNumber;
 
     private CVRSystem _vrSystem;
+    private Matrix4x4 calibrationTransformation = Matrix4x4.identity;
+    private bool isCalibrated = false;
 
     void Start()
     {
@@ -93,6 +95,14 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
                 Vector3 trackerPosition = mat.pos;
                 Quaternion trackerRotation = mat.rot;
 
+                // Apply calibration transformation
+                if (isCalibrated)
+                {
+                    trackerPosition = calibrationTransformation.MultiplyPoint3x4(trackerPosition);
+                    trackerRotation = calibrationTransformation.rotation * trackerRotation;
+                }
+
+                // Offset
                 Quaternion offsetRotation = Quaternion.Euler(binding.rotationOffset);
                 Quaternion finalRotation = trackerRotation * offsetRotation;
 
@@ -103,9 +113,40 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
         }
     }
 
+    public Vector3 GetTrackerPosition()
+    {
+        foreach (var binding in trackerBindings)
+        {
+            if (binding.deviceId != -1 && binding.serialNumber == calibrationTrackerSerialNumber)
+            {
+                TrackedDevicePose_t[] allPoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
+                _vrSystem.GetDeviceToAbsoluteTrackingPose(ETrackingUniverseOrigin.TrackingUniverseStanding, 0, allPoses);
+
+                var pose = allPoses[binding.deviceId];
+                var absTracking = pose.mDeviceToAbsoluteTracking;
+                var mat = new SteamVR_Utils.RigidTransform(absTracking);
+
+                Vector3 trackerPosition = mat.pos;
+
+                Debug.Log($"Tracker {binding.serialNumber} position: {trackerPosition}");
+
+                return trackerPosition;
+            }
+        }
+        Debug.LogWarning("Calibration tracker not found or device ID invalid.");
+        return Vector3.zero;
+    }
+
+    public void ApplyCalibrationTransformation(Matrix4x4 transformation)
+    {
+        calibrationTransformation = transformation;
+        isCalibrated = true;
+    }
+
     void Update()
     {
         UpdateTrackedObjects();
+
         if (Input.GetKeyDown(resetDeviceIds))
         {
             SetDeviceIds();
