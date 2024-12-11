@@ -13,12 +13,21 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
         public Vector3 positionOffset;
         public Vector3 rotationOffset;
         [HideInInspector] public int deviceId = -1;
+
+        // New fields to store the previous offsets
+        public Vector3 previousPositionOffset;
+        public float previousRotationOffset;
     }
 
     public List<TrackerBinding> trackerBindings = new List<TrackerBinding>();
     public ETrackedDeviceClass targetClass = ETrackedDeviceClass.GenericTracker;
     public KeyCode resetDeviceIds = KeyCode.Tab;
     public string calibrationTrackerSerialNumber;
+
+    public KeyCode checkDistanceKey = KeyCode.Space;
+    public float positionThreshold = 0.25f; // Position Threshold
+    public float pitchThreshold = 5.0f; // Yaw Threshold
+    public string hmdTrackerSerialNumber = "LHR-A5A8A1BC";
 
     private CVRSystem _vrSystem;
     private Matrix4x4 calibrationTransformation = Matrix4x4.identity;
@@ -79,6 +88,31 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
         return serialNumber.ToString();
     }
 
+    //void UpdateTrackedObjects()
+    //{
+    //    TrackedDevicePose_t[] allPoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
+    //    _vrSystem.GetDeviceToAbsoluteTrackingPose(ETrackingUniverseOrigin.TrackingUniverseStanding, 0, allPoses);
+
+    //    foreach (var binding in trackerBindings)
+    //    {
+    //        if (binding.deviceId != -1)
+    //        {
+    //            var pose = allPoses[binding.deviceId];
+    //            var absTracking = pose.mDeviceToAbsoluteTracking;
+    //            var mat = new SteamVR_Utils.RigidTransform(absTracking);
+
+    //            Vector3 trackerPosition = mat.pos;
+    //            Quaternion trackerRotation = mat.rot;
+
+    //            Quaternion offsetRotation = Quaternion.Euler(binding.rotationOffset);
+    //            Quaternion finalRotation = trackerRotation * offsetRotation;
+
+    //            Vector3 finalPosition = trackerPosition + binding.positionOffset;
+
+    //            binding.targetObject.transform.SetPositionAndRotation(finalPosition, finalRotation);
+    //        }
+    //    }
+    //}
     void UpdateTrackedObjects()
     {
         TrackedDevicePose_t[] allPoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
@@ -106,6 +140,25 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
                 Quaternion finalRotation = trackerRotation * Quaternion.Euler(binding.rotationOffset);
 
                 binding.targetObject.transform.SetPositionAndRotation(finalPosition, finalRotation);
+            }
+        }
+
+        for (uint i = 0; i < OpenVR.k_unMaxTrackedDeviceCount; i++)
+        {
+            var deviceClass = _vrSystem.GetTrackedDeviceClass(i);
+            if (deviceClass == targetClass && trackerBindings.Find(b => b.deviceId == (int)i) == null) 
+            {
+                var pose = allPoses[i];
+                if (pose.bDeviceIsConnected && pose.bPoseIsValid)
+                {
+                    var absTracking = pose.mDeviceToAbsoluteTracking;
+                    var mat = new SteamVR_Utils.RigidTransform(absTracking);
+
+                    Vector3 trackerPosition = mat.pos;
+                    Vector3 trackerRotation = mat.rot.eulerAngles;
+
+                    Debug.Log($"Unbound Tracker {i} Position: {trackerPosition}, Rotation (X, Y, Z): {trackerRotation.x}, {trackerRotation.y}, {trackerRotation.z}");
+                }
             }
         }
     }

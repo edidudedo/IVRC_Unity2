@@ -13,6 +13,7 @@ public class AudioManagerStateScript : MonoBehaviour
     {
         // Find the StateManager object
         GameObject stateManagerObject = GameObject.Find("StateManager");
+        audioSource.volume = 0.7f;
 
         if (stateManagerObject != null)
         {

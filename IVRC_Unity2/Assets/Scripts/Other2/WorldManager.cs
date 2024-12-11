@@ -24,11 +24,13 @@ public class InitialPositionBinder : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("test");
         var error = EVRInitError.None;
         _vrSystem = OpenVR.Init(ref error, EVRApplicationType.VRApplication_Other);
         if (error != EVRInitError.None)
         {
             Debug.LogWarning("Init error: " + error);
+            Debug.Log("test2");
         }
         else
         {
