@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Valve.VR;
-using System.Text;
 
 public class SelfManagementOfTrackedDevices : MonoBehaviour
 {
@@ -23,6 +22,7 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
     public List<TrackerBinding> trackerBindings = new List<TrackerBinding>();
     public ETrackedDeviceClass targetClass = ETrackedDeviceClass.GenericTracker;
     public KeyCode resetDeviceIds = KeyCode.Tab;
+    public string calibrationTrackerSerialNumber;
 
     public KeyCode checkDistanceKey = KeyCode.Space;
     public float positionThreshold = 0.25f; // Position Threshold
@@ -30,6 +30,8 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
     public string hmdTrackerSerialNumber = "LHR-A5A8A1BC";
 
     private CVRSystem _vrSystem;
+    private Matrix4x4 calibrationTransformation = Matrix4x4.identity;
+    private bool isCalibrated = false;
 
     void Start()
     {
@@ -127,10 +129,15 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
                 Vector3 trackerPosition = mat.pos;
                 Quaternion trackerRotation = mat.rot;
 
-                Quaternion offsetRotation = Quaternion.Euler(binding.rotationOffset);
-                Quaternion finalRotation = trackerRotation * offsetRotation;
+                if (isCalibrated)
+                {
+                    CalibrationCalculator calculator = new CalibrationCalculator();
+                    trackerPosition = calculator.TransformPosition(trackerPosition, calibrationTransformation);
+                    trackerRotation = calculator.TransformRotation(trackerRotation, calibrationTransformation);
+                }
 
                 Vector3 finalPosition = trackerPosition + binding.positionOffset;
+                Quaternion finalRotation = trackerRotation * Quaternion.Euler(binding.rotationOffset);
 
                 binding.targetObject.transform.SetPositionAndRotation(finalPosition, finalRotation);
             }
@@ -156,137 +163,59 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
         }
     }
 
-
-    //void Update()
-    //{
-    //    UpdateTrackedObjects();
-
-    //    GameObject hmd = GameObject.Find("CenterEyeAnchor");
-    //    if (hmd != null)
-    //    {
-    //        Vector3 hmdPosition = hmd.transform.position;
-    //        Vector3 hmdRotation = hmd.transform.rotation.eulerAngles;
-
-    //        Debug.Log($"HMD Position: {hmdPosition}, Rotation (X, Y, Z): {hmdRotation.x}, {hmdRotation.y}, {hmdRotation.z}");
-    //    }
-
-    //    foreach (var binding in trackerBindings)
-    //    {
-    //        if (binding.deviceId != -1)
-    //        {
-    //            Vector3 trackerPosition = binding.targetObject.transform.position;
-    //            Vector3 trackerRotation = binding.targetObject.transform.rotation.eulerAngles;
-
-    //            Debug.Log($"Tracker {binding.deviceId} Position: {trackerPosition}, Rotation (X, Y, Z): {trackerRotation.x}, {trackerRotation.y}, {trackerRotation.z}");
-    //        }
-    //    }
-
-    //    if (Input.GetKeyDown(resetDeviceIds))
-    //    {
-    //        SetDeviceIds();
-    //    }
-    //}
-
-    void Update()
+    public Vector3 GetTrackerPosition()
     {
-        UpdateTrackedObjects();
-
-        GameObject hmd = GameObject.Find("CenterEyeAnchor");
-        if (hmd != null)
+        foreach (var binding in trackerBindings)
         {
-            Vector3 hmdPosition = hmd.transform.position;
-            Vector3 hmdRotation = hmd.transform.rotation.eulerAngles;
-
-            Debug.Log($"HMD Position: {hmdPosition}, Rotation (X, Y, Z): {hmdRotation.x}, {hmdRotation.y}, {hmdRotation.z}");
-
-            if (Input.GetKeyDown(checkDistanceKey))
+            if (binding.deviceId != -1 && binding.serialNumber == calibrationTrackerSerialNumber)
             {
                 TrackedDevicePose_t[] allPoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
                 _vrSystem.GetDeviceToAbsoluteTrackingPose(ETrackingUniverseOrigin.TrackingUniverseStanding, 0, allPoses);
 
-                for (uint i = 0; i < OpenVR.k_unMaxTrackedDeviceCount; i++)
-                {
-                    var deviceClass = _vrSystem.GetTrackedDeviceClass(i);
-                    if (deviceClass == ETrackedDeviceClass.GenericTracker)
-                    {
-                        string serialNumber = GetDeviceSerialNumber((int)i);
-                        if (serialNumber == hmdTrackerSerialNumber)
-                        {
-                            var pose = allPoses[i];
-                            if (pose.bDeviceIsConnected && pose.bPoseIsValid)
-                            {
-                                var mat = new SteamVR_Utils.RigidTransform(pose.mDeviceToAbsoluteTracking);
+                var pose = allPoses[binding.deviceId];
+                var absTracking = pose.mDeviceToAbsoluteTracking;
+                var mat = new SteamVR_Utils.RigidTransform(absTracking);
 
-                                Vector3 trackerPosition = mat.pos;
-                                Vector3 trackerRotation = mat.rot.eulerAngles;
+                Vector3 trackerPosition = mat.pos;
 
-                                Vector3 positionOffset = hmdPosition - trackerPosition + new Vector3(-0.02f, 0.05f, 0.1f);
-                                float yawOffset = hmdRotation.y - trackerRotation.y;
+                // Debug.Log($"Tracker {binding.serialNumber} position: {trackerPosition}");
 
-                                if (positionOffset.magnitude > positionThreshold)
-                                {
-                                    Debug.Log("Position exceeded threshold, applying offset...");
-
-                                    foreach (var tBinding in trackerBindings)
-                                    {
-                                        if (tBinding.deviceId != -1)
-                                        {
-                                            // Remove previous offset
-                                            tBinding.positionOffset -= tBinding.previousPositionOffset;
-
-                                            // Apply the new offset
-                                            tBinding.positionOffset += positionOffset;
-
-                                            // Store the current offset as previous for the next cycle
-                                            tBinding.previousPositionOffset = positionOffset;
-
-                                            // Update the position and rotation of the bound object
-                                            tBinding.targetObject.transform.position += positionOffset;
-                                        }
-                                    }
-                                }
-                                if (Mathf.Abs(yawOffset) > pitchThreshold)
-                                {
-                                    Debug.Log("Pitch offset exceeded threshold, applying offset...");
-
-                                    foreach (var tBinding in trackerBindings)
-                                    {
-                                        if (tBinding.deviceId != -1)
-                                        {
-                                            // Remove previous offset
-                                            tBinding.rotationOffset.y -= tBinding.previousRotationOffset;
-
-                                            // Apply the new offset
-                                            tBinding.rotationOffset.y += yawOffset;
-
-                                            // Store the current offset as previous for the next cycle
-                                            tBinding.previousRotationOffset = yawOffset;
-
-                                            // Update the position and rotation of the bound object
-                                            Quaternion currentRotation = tBinding.targetObject.transform.rotation;
-                                            tBinding.targetObject.transform.rotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y + yawOffset, currentRotation.eulerAngles.z);
-                                        }
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
+                return trackerPosition;
             }
         }
+        Debug.LogWarning("Calibration tracker not found or device ID invalid.");
+        return Vector3.zero;
+    }
 
-        // Output the position and rotation of trackers
+    public Quaternion GetTrackerRotation()
+    {
         foreach (var binding in trackerBindings)
         {
-            if (binding.deviceId != -1)
+            if (binding.deviceId != -1 && binding.serialNumber == calibrationTrackerSerialNumber)
             {
-                Vector3 trackerPosition = binding.targetObject.transform.position;
-                Vector3 trackerRotation = binding.targetObject.transform.rotation.eulerAngles;
+                TrackedDevicePose_t[] allPoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
+                _vrSystem.GetDeviceToAbsoluteTrackingPose(ETrackingUniverseOrigin.TrackingUniverseStanding, 0, allPoses);
 
-                Debug.Log($"Tracker {binding.deviceId} Position: {trackerPosition}, Rotation (X, Y, Z): {trackerRotation.x}, {trackerRotation.y}, {trackerRotation.z}");
+                var pose = allPoses[binding.deviceId];
+                var absTracking = pose.mDeviceToAbsoluteTracking;
+                var mat = new SteamVR_Utils.RigidTransform(absTracking);
+
+                return mat.rot;
             }
         }
+        Debug.LogWarning("Calibration tracker not found or device ID invalid.");
+        return Quaternion.identity;
+    }
+
+    public void ApplyCalibrationTransformation(Matrix4x4 transformation)
+    {
+        calibrationTransformation = transformation;
+        isCalibrated = true;
+    }
+
+    void Update()
+    {
+        UpdateTrackedObjects();
 
         if (Input.GetKeyDown(resetDeviceIds))
         {
