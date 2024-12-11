@@ -11,6 +11,8 @@ public class CalibrationManager : MonoBehaviour
 
     private List<Vector3> positionsA = new List<Vector3>();
     private List<Vector3> positionsB = new List<Vector3>();
+    private List<Quaternion> rotationsA = new List<Quaternion>();
+    private List<Quaternion> rotationsB = new List<Quaternion>();
     private Matrix4x4 currentTransformation = Matrix4x4.identity;
     private bool isCalibrated = false;
     private int minimumDataPoints = 200;
@@ -35,25 +37,35 @@ public class CalibrationManager : MonoBehaviour
 
     private IEnumerator CalibrationRoutine()
     {
+        Debug.Log("Starting calibration, please move the device in all directions");
+
+        yield return new WaitForSeconds(0.5f);
+
         positionsA.Clear();
         positionsB.Clear();
-        isCalibrated = false;
+        rotationsA.Clear();
+        rotationsB.Clear();
 
-        Debug.Log("Calibration started. Please move the device to collect data.");
+        float totalTime = 0f;
+        float calibrationDuration = 5f;
 
-        int dataPointsCollected = 0;
-
-        while (dataPointsCollected < minimumDataPoints)
+        while (totalTime < calibrationDuration)
         {
             CollectCalibrationData();
-            dataPointsCollected++;
+            totalTime += Time.deltaTime;
             yield return null;
         }
 
-        ComputeCalibration();
-        isCalibrated = true;
-
-        Debug.Log("Calibration completed.");
+        if (positionsA.Count >= minimumDataPoints)
+        {
+            ComputeCalibration();
+            isCalibrated = true;
+            Debug.Log("Calibration completed successfully");
+        }
+        else
+        {
+            Debug.LogWarning("Not enough valid samples collected. Please try again with more movement.");
+        }
     }
 
     private void CollectCalibrationData()
@@ -65,10 +77,11 @@ public class CalibrationManager : MonoBehaviour
         }
 
         Vector3 positionA = trackerManager.GetTrackerPosition();
+        Quaternion rotationA = trackerManager.GetTrackerRotation();
         if (positionA != null)
         {
             positionsA.Add(positionA);
-            Debug.Log($"Collected positionA: {positionA}");
+            rotationsA.Add(rotationA);
         }
         else
         {
@@ -78,8 +91,9 @@ public class CalibrationManager : MonoBehaviour
         if (HMD != null)
         {
             Vector3 positionB = HMD.position;
+            Quaternion rotationB = HMD.rotation;
             positionsB.Add(positionB);
-            Debug.Log($"Collected positionB: {positionB}");
+            rotationsB.Add(rotationB);
         }
         else
         {
@@ -95,13 +109,13 @@ public class CalibrationManager : MonoBehaviour
             return;
         }
 
-        if (positionsA.Count != positionsB.Count)
+        if (positionsA.Count != positionsB.Count || rotationsA.Count != rotationsB.Count)
         {
-            Debug.LogError("positionsA and positionsB have different counts.");
+            Debug.LogError("positions or rotations have different counts.");
             return;
         }
 
         CalibrationCalculator calculator = new CalibrationCalculator();
-        currentTransformation = calculator.CalculateTransformation(positionsA, positionsB);
+        currentTransformation = calculator.CalculateTransformation(positionsA, positionsB, rotationsA, rotationsB);
     }
 }

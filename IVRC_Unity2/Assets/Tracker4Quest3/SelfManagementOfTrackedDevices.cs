@@ -95,18 +95,15 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
                 Vector3 trackerPosition = mat.pos;
                 Quaternion trackerRotation = mat.rot;
 
-                // Apply calibration transformation
                 if (isCalibrated)
                 {
-                    trackerPosition = calibrationTransformation.MultiplyPoint3x4(trackerPosition);
-                    trackerRotation = calibrationTransformation.rotation * trackerRotation;
+                    CalibrationCalculator calculator = new CalibrationCalculator();
+                    trackerPosition = calculator.TransformPosition(trackerPosition, calibrationTransformation);
+                    trackerRotation = calculator.TransformRotation(trackerRotation, calibrationTransformation);
                 }
 
-                // Offset
-                Quaternion offsetRotation = Quaternion.Euler(binding.rotationOffset);
-                Quaternion finalRotation = trackerRotation * offsetRotation;
-
                 Vector3 finalPosition = trackerPosition + binding.positionOffset;
+                Quaternion finalRotation = trackerRotation * Quaternion.Euler(binding.rotationOffset);
 
                 binding.targetObject.transform.SetPositionAndRotation(finalPosition, finalRotation);
             }
@@ -128,13 +125,33 @@ public class SelfManagementOfTrackedDevices : MonoBehaviour
 
                 Vector3 trackerPosition = mat.pos;
 
-                Debug.Log($"Tracker {binding.serialNumber} position: {trackerPosition}");
+                // Debug.Log($"Tracker {binding.serialNumber} position: {trackerPosition}");
 
                 return trackerPosition;
             }
         }
         Debug.LogWarning("Calibration tracker not found or device ID invalid.");
         return Vector3.zero;
+    }
+
+    public Quaternion GetTrackerRotation()
+    {
+        foreach (var binding in trackerBindings)
+        {
+            if (binding.deviceId != -1 && binding.serialNumber == calibrationTrackerSerialNumber)
+            {
+                TrackedDevicePose_t[] allPoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
+                _vrSystem.GetDeviceToAbsoluteTrackingPose(ETrackingUniverseOrigin.TrackingUniverseStanding, 0, allPoses);
+
+                var pose = allPoses[binding.deviceId];
+                var absTracking = pose.mDeviceToAbsoluteTracking;
+                var mat = new SteamVR_Utils.RigidTransform(absTracking);
+
+                return mat.rot;
+            }
+        }
+        Debug.LogWarning("Calibration tracker not found or device ID invalid.");
+        return Quaternion.identity;
     }
 
     public void ApplyCalibrationTransformation(Matrix4x4 transformation)
